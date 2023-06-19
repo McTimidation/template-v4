@@ -1,7 +1,21 @@
 services:
-  postgres:
+  db:
     image: postgres:15.0
     ports:
       - 5432:5432
     environment:
       - "POSTGRES_PASSWORD=postgres"
+  web:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      ports:
+        - "8000:8000"
+      volumes:
+        - .:/app
+      command: python manage.py runserver 0.0.0.0:5432
+      depends_on:
+        - db
+volumes:
+  pgdata:
+  
